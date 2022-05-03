@@ -55,7 +55,6 @@ func main() {
         if err != nil {
                 log.Fatalf("failed to recognize: %v", err)
         }
-        t2:=time.Since(t1)
         fmt.Println(time.Now(), "text received")
         // Prints the results.
         for _, result := range resp.Results {
@@ -63,6 +62,7 @@ func main() {
                         fmt.Printf("\"%v\" (confidence=%3f)\n", alt.Transcript, alt.Confidence)
                 }
         }
+        t2:=time.Since(t1)
         fmt.Println("time diff:", t2)
 
 }
