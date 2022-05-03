@@ -17,7 +17,8 @@ func main() {
         ctx := context.Background()
 
         // Creates a client.
-        client, err := speech.NewClient(ctx, option.WithCredentialsFile("./defaultConfig.json"))
+        filePath := "./defaultConfig.json"
+        client, err := speech.NewClient(ctx, option.WithCredentialsFile(filePath))
         if err != nil {
                 log.Fatalf("Failed to create client: %v", err)
         }
