@@ -1,5 +1,5 @@
 .vscode
 go.mod
 go.sum
-defaultConfig.json
+googleCredential.json
 stt-test

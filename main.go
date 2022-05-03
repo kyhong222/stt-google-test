@@ -4,8 +4,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"time"
 
 	speech "cloud.google.com/go/speech/apiv1"
@@ -16,9 +19,18 @@ import (
 func main() {
         ctx := context.Background()
 
+        // audio config input from json
+        audioConfig := make(map[string]int32)
+        audioConfigPath := "./audioConfig.json"
+        jsonFile, _ := os.Open(audioConfigPath)
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+        json.Unmarshal([]byte(byteValue), &audioConfig)
+
         // Creates a client.
-        filePath := "./defaultConfig.json"
-        client, err := speech.NewClient(ctx, option.WithCredentialsFile(filePath))
+        googleCredentialPath := "./googleCredential.json"
+        client, err := speech.NewClient(ctx, option.WithCredentialsFile(googleCredentialPath))
         if err != nil {
                 log.Fatalf("Failed to create client: %v", err)
         }
@@ -33,7 +45,7 @@ func main() {
         resp, err := client.Recognize(ctx, &speechpb.RecognizeRequest{
                 Config: &speechpb.RecognitionConfig{
                         Encoding:        speechpb.RecognitionConfig_LINEAR16,
-                        SampleRateHertz: 16000,
+                        SampleRateHertz: (audioConfig["SampleRateHertz"]),
                         LanguageCode:    "en-US",
                 },
                 Audio: &speechpb.RecognitionAudio{
